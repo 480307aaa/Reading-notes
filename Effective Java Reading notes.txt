@@ -129,6 +129,55 @@ public Object pop(){
 预测、运行缓慢，一般情况下也是不必要的 。
 Java 语言规范不仅不保证终结方法或者清除方法会被及时地执行，而且根本就不保证它们会被执行
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第九条--try-with-resources 优先于 try-finally
+
+旧版关闭资源：
+public void test4() {
+    InputStream inputStream = null;
+    try {
+        inputStream = new FileInputStream("D:\\head.jpg");
+        // do something
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+这种写法的麻烦之处在于，我们需要在finally块中关闭资源，所以inputStream只能定义在try块的外面。关闭之前，还需要做一步判空，避免因为inputStream为空而导致的空指针异常。这种写法是很繁琐的。
+
+新版关闭资源
+同样的功能，如果采用try-with-resources，就会使代码变得非常简洁：
+@Test
+public void test5() {
+    try (InputStream inputStream = new FileInputStream("D:\\head.jpg")) {
+        byte[] bytes = inputStream.readAllBytes();
+        // do something
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+带资源的try语句的3个关键点：
+
+1、由带资源的try语句管理的资源必须是实现了AutoCloseable接口的类的对象。
+
+2、在try代码中声明的资源被隐式声明为fianl。
+
+3、通过使用分号分隔每个声明可以管理多个资源。
+当需要关闭的资源有多个，也就是try-finally有嵌套时，如果抛出异常，异常消息可能会出现覆盖，在异常堆轨迹中，完全没有关于第一个异常的记录，这在现实的系统中会导致调试变得非常复杂，
+因为通常需要看到第一个异常才能诊断出问题何在。
+总结：
+try-with-resources可以使代码更加简洁而且不容易出错。相比传统的try-catch-finally的写法，显然try-with-resources优点更多，至少不会存在finally关闭资源因为没判空而导致空指针的问题
+
 
 
 
