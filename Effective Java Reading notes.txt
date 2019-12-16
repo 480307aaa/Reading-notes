@@ -78,6 +78,17 @@ public class UtilityClass{
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+第五条--优先考虑依赖注人来引用资源（一直都在用，但是不知道规则名字）
+不要用 Singleton 和静态工具类来实现依赖一个或多个底层资源的类，且该资源的行为会影响到该类的行为 ；也不要直接用这个类来创建这些资源 。 而应该将这些资源或者工厂传给构造器（或者静态工厂，或者构建器），通过它们来创建类 。这个实践就被称作依赖注入，它极大地提升了类的灵活性 、可重用性和可测试性
+publ ic class SpellChecker｛
+    //在SpellChecker类中以构造器参数的方式引入Lexicon类
+	private final Lexicon dictionary;
+    public SpellChecker(Lexicon dictionary) {
+    this.dictionary = Objects requireNonNull(dictionary);
+	}
+    ......
+}
+
 
 
 	
