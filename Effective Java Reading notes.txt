@@ -227,6 +227,63 @@ try-with-resources可以使代码更加简洁而且不容易出错。相比传�
         }
         return false;
  }
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第十一条--覆盖equals时总要覆盖hashCode
+
+1)在每个覆盖了equals方法的类中，都必须覆盖hashCode方法。
+2)不要企图让equals方法过于智能 。
+3)不要将equals声明中的Object对象替换为其他的类型
+相同的实例，其散列码一定相同，不同的实例，其散列码也可能相同
+String类的hashCode方法源码：
+public int hashCode() {
+	int h = hash;
+	if (h == 0 && value.length > 0) {
+		char val[] = value;
+
+		for (int i = 0; i < value.length; i++) {
+			h = 31 * h + val[i];
+		}
+		hash = h;
+	}
+	return h;
+}
+举例说明：假设有一个PhoneNumber类，只需两个实例的prefix和lineNumber属性相等，即可认为两个PhoneNumber相等：（该例子来自于：https://www.jianshu.com/p/6ceec4d542f8）
+public class PhoneNumber {
+    private short areaCode;
+    private short prefix;//关键属性
+    private short lineNumber;//关键属性
+
+    public PhoneNumber(short areaCode, short prefix, short lineNumber) {
+        this.areaCode = areaCode;
+        this.prefix = prefix;
+        this.lineNumber = lineNumber;
+    }
+
+    public boolean equals(Object o) {
+        if(o == this) {
+            return true;
+        }
+
+        if(!(o instanceof PhoneNumber)) {
+            return false;
+        }
+
+        PhoneNumber compareO = (PhoneNumber)o;
+
+        return compareO.prefix == this.prefix
+                && compareO.lineNumber == this.lineNumber;
+    }
+}
+
+然后将PhoneNumber与HashMap一起使用：
+Map<PhoneNumber, String> m = new HashMap<>();
+m.put(new PhoneNumber(21, 37, 3245), "xiaobai");‘
+
+System.out.println(m.get(new PhoneNumber(53, 37, 3245)));//输出：null
+你可能期望输出的是："xiaobai"，因为put和get的两个key对象的equals返回是true，但实际上得到的却是null，为什么呢？原因就在于未覆盖hashCode，两个对象即便相等，但是其hashCode还是可能不等，那么put方法把PhoneNumber对象存放至一个散列桶（hashbucket）中，而get方法却在另外一个散列桶中查找这个对象，当然找不到，退一步说，即便是两个实例刚好被放至于同一个散列桶中，get方法依然还是会返回null，因为HashMap有一项机制：如果两个实例散列码不匹配，直接放弃比较其等同性
+
 
 
 
