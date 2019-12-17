@@ -302,6 +302,30 @@ Cloneable接口不包含任何的方法
 public interface Cloneable {
 }
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第十四条--考虑实现Comparable接口
+Comparable接口中只有一个方法：compareTo
+public interface Comparable<T> {
+	 public int compareTo(T o);
+}
+
+类实现了 Comparable 接口，就表明它的实例具有内在的排序关系(natural ordering ）。为实现 Comparable 接口的对象数组进行排序就这么简单 ：Arrays.sort(a);
+Java 平台类库中的所有值类(value classes)，以及所有的枚举类型(详见第 34 条)都实现了 Comparable 接口.
+Java7之后提供了compare方法去具体实现compareTo方法，比如下面的Integer包装类的compareTo方法的具体实现：
+public static int compare(int x, int y) {
+	return (x < y) ? -1 : ((x == y) ? 0 : 1);
+}
+总而言之，每当实现一个对排序敏感的类时，都应该让这个类实现 Comparable 接口，以便其实例可以轻松地被分类 、搜索，以及用在基于比较的集合中 。每当在 compareTo 方法的实现中比较域值时，都要避免使用 ＜ 和＞操作符,两种使用方法：
+1）应该在装箱基本类型的类中使用静态的 compare 方法
+static Comparator<Object> hashCodeOrder=new Comparator<>(){
+	public int compare(Object o1,Object O2){
+		return Integer.compare(O1.hashCode,O2.hashCode);
+	}
+};
+2）在 Comparator 接口中使用比较器构造方法 
+static Comparator<Object> hashCodeOrder=Comparator.comparingInt(0->o.hashCode());
+
 
 
 
