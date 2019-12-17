@@ -284,6 +284,17 @@ m.put(new PhoneNumber(21, 37, 3245), "xiaobai");‘
 System.out.println(m.get(new PhoneNumber(53, 37, 3245)));//输出：null
 你可能期望输出的是："xiaobai"，因为put和get的两个key对象的equals返回是true，但实际上得到的却是null，为什么呢？原因就在于未覆盖hashCode，两个对象即便相等，但是其hashCode还是可能不等，那么put方法把PhoneNumber对象存放至一个散列桶（hashbucket）中，而get方法却在另外一个散列桶中查找这个对象，当然找不到，退一步说，即便是两个实例刚好被放至于同一个散列桶中，get方法依然还是会返回null，因为HashMap有一项机制：如果两个实例散列码不匹配，直接放弃比较其等同性
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+第十二条--始终要覆盖toString
+基本数据类型和String都已经覆盖父类toString方法
+Object类的toString()方法源码：它包含类的名称，以及一个“＠”符号，接着是散列码的无符号十六进制表示法，比如MyClass@19765
+public String toString() {
+	return getClass().getName() + "@" + Integer.toHexString(hashCode());
+}
+在实际应用中，toString方法应该返回对象中包含的所有值得关注的信息，无论是否决定指定格式，都应该在文档中明确地表明你的意图，toString方法应该有简洁的格式和详细的描述。
+
 
 
 
