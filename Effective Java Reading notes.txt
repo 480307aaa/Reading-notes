@@ -475,6 +475,109 @@ PECS 表示 producer-extends, consumer－super，如果参数化类型表示一�
 
 第三十三条--优先考虑类型安全的异构容器
 
+【枚举和注解】
+Java 支持两种特殊用途的引用类型：一种是类，称作枚举类型(enum type)；一种是接口，称作注解类型(annotation type)。 
+
+第三十四条--用enum代替int
+
+int 枚举模式，编译时常量，数值有变，需要重新编译，否则，行为不准
+public static final int APPLE_FUI = 0;
+public static final int APPLE_PIPPIN ＝1；
+public static final int APPLE_GRANNY_SMITH = 2;
+
+String 枚举模式
+private final static String QZ_ID_TENANT_ID_KEY = "qz::%s::tenant";
+
+枚举类型
+public enum Apple { FUJI, PIPPIN, GRANNY_SMITH }
+public enum Orange｛ NAVEL, TEMPLE, BLOOD }
+
+一个例子：
+public enum SecurityType {
+
+    /**
+     * 公开
+     */
+
+    PUBLIC("1", "gk", "公开", 0),
+
+    INTERNAL("2", "nb", "内部", 1),
+
+    SECRET("3", "mm", "秘密", 2),
+
+    CONFIDENTIAL("4", "jm", "机密", 3);
+
+    private String id;
+
+    private String code;
+
+    private String name;
+
+    private Integer value;
+
+    SecurityType(String id, String code, String name, Integer value) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.value = value;
+    }
+
+
+    public String id() {
+        return id;
+    }
+
+    public String code() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getValue() {
+        return value;
+    }
+
+
+    public static SecurityType getEnumTypeByValue(Integer securityTypeValue) {
+
+        for (SecurityType type : SecurityType.values()) {
+            if (type.getValue().equals(securityTypeValue)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    public static SecurityType getEnumTypeById(String id) {
+        for (SecurityType type : SecurityType.values()) {
+            if (type.id().equals(id)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    public static SecurityType getEnumTypeByCode(String code) {
+        for (SecurityType type : SecurityType.values()) {
+            if (type.code().equals(code)) {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    public static Map<Integer, String> listAllTypes() {
+        SecurityType[] types = SecurityType.values();
+        Map<Integer, String> map = new HashMap<>(types.length);
+        for (SecurityType type : types) {
+            map.put(type.getValue(), type.getName());
+        }
+        return map;
+    }
+}
+
 
 
 
