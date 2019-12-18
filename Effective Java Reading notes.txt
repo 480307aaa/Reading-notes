@@ -418,6 +418,26 @@ public static class PendingQueryVO {
 泛型：泛型类+泛型接口，泛型信息在运行时会被擦除。如果使用原生态类型，就失掉了泛型在安全性和描述性方面的所有优势，其实现在写代码过程中很少直接用原生态类型了，一般都是List<Integer> list=new ArrayList<>()等写法
 如果要使用泛型，但不确定或者不关心实际的类型参数，就可以用一个问号代替。例如，泛型 Set<E＞的无限制通配符类型为 Set <?>（读作“某个类型的集合”），通配符类型是安全的，原生态类型则不安全。
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第二十七条--消除非受检的警告
+SuppressWarnings注解可以用在任何粒度的级别中，从单独的局部变量声明到整个类都可以。应该始终在尽可能小的范围内使用 SuppressWarnings 注解。它通常是个变量
+声明，或是非常简短的方法或构造器 。永远不要在整个类上使用SuppressWarnings ，这么做可能会掩盖重要的警告。
+Java受检异常和非受检异常：
+Java中异常的分类
+Java中所有异常，都继承自java.lang.Throwable类。
+Throwable有两个直接子类，Error类和Exception类。
+
+
+1.Error错误：JVM内部的严重问题。无法恢复。程序人员不用处理。
+2.Exception异常：普通的问题。通过合理的处理，程序还可以回到正常执行流程。要求编程人员要进行处理。
+3.RuntimeException:也叫非受检异常(unchecked exception).这类异常是编程人员的逻辑问题。应该承担责任。Java编译器不进行强制要求处理。 也就是说，这类异常再程序中，可以进行处理，也可以不处理。
+4.受检异常(checked exception).这类异常是由一些外部的偶然因素所引起的。Java编译器强制要求处理。也就是说，程序必须进行对这类异常进行处理。
+
+常见异常：
+1)非受检的：NullPointerException,ClassCastException,ArrayIndexsOutOfBoundsException,ArithmeticException(算术异常，除0溢出)
+2)受检：Exception,FileNotFoundException,IOException,SQLException.
+
 
 
 
