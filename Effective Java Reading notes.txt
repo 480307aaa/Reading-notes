@@ -438,6 +438,19 @@ Throwable有两个直接子类，Error类和Exception类。
 1)非受检的：NullPointerException,ClassCastException,ArrayIndexsOutOfBoundsException,ArithmeticException(算术异常，除0溢出)
 2)受检：Exception,FileNotFoundException,IOException,SQLException.
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第二十八条--列表优于数组
+//运行时才发现错误
+Object[] objectArray=new Long[1];
+objectArray[0]='I don't fit it';
+//编译时就能发现错误
+List<Object> o1=new ArrayList<Long>();
+o1.add('I don't fit it');
+数组和列表的区别：
+1）数组是协变的，而泛型是可变的
+2）数组是具体化的，数组会在运行时知道和强化它们的元素类型 ，泛型是通过擦除来实现的，泛型只是在编译器强化数据的类型信息，在运行时擦除类型信息，方便同其他没有泛型的数据互用。
+
 
 
 
