@@ -692,6 +692,14 @@ Stream pipeline 通常是 lazy 的 ：直到调用终止操作时才会开始计
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+第四十六条--优先选择Stream中无副作用的函数
+Stream收集器：toList、toSet、toMap、groupingBy和joining，经过一系列的中间计算，得到最后的计算结果。
+给出一个例子：是在实现一个excle导出功能时准备表头时的操作：
+ //将查询到的数据转成list形式存储
+List<Object[]> res = signPersonVOS.stream().map(signPersonVO -> new Object[]{
+		signPersonVO.getName(), signPersonVO.getDeptName(), signPersonVO.getSigned(), null}).
+		collect(Collectors.toList());
+
 
 
 
