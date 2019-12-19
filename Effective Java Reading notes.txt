@@ -699,6 +699,30 @@ Stream收集器：toList、toSet、toMap、groupingBy和joining，经过一系�
 List<Object[]> res = signPersonVOS.stream().map(signPersonVO -> new Object[]{
 		signPersonVO.getName(), signPersonVO.getDeptName(), signPersonVO.getSigned(), null}).
 		collect(Collectors.toList());
+		
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+第四十七条--Stream要优先使用Collection作为返回类型
+
+第四十八条--谨慎使用Stream并行
+总而言之，尽量不要并行 Stream pipeline ，除非有足够的理由相信它能保证计算的正确性，并且能加快程序的运行速度 。 如果对 Stream 进行不恰当的并行操作，可能导致程序运
+行失败，或者造成性能灾难 。 如果确信并行是可行的，并发运行时一定要确保代码正确，并在真实环境下认真地进行性能测量
+下面给出一个例子：并行更改记录索引值的功能，批量更新
+meetingTypeDOS.parallelStream().forEach(meetingTypeRepository::updateIndex);
+另外一个例子：是构建参会领导的个人信息的处理：
+leaderList.parallelStream().forEach(leader -> {
+            MeetingLeaderMeetingDO leaderMeetingDO = MeetingLeaderMeetingDO.builder()
+                    .qzId(qzId)
+                    .memberId(leader)
+                    .meetingId(meetingId)
+                    .start(start)
+                    .end(end)
+                    .build();
+
+            leaderMeetingRepository.save(leaderMeetingDO);
+});
+类似于这些功能实现,parallelStream确实能够发挥其最大性能，否则，谨慎使用parallelStream。
+ 
 
 
 
