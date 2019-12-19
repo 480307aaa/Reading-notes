@@ -851,6 +851,19 @@ java.util.Random 类用于生成随机数，在多线程环境下性能不佳，
 从 Java 7 开始，就不应该再使用 Random 了 。现在选择随机数生成器时，大多使用 ThreadLocalRandom
 应该熟悉 java.lang 、java.util、java.io 及其子包中的内容
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第六十条--如果需要精确的答案，请避免使用double或者float
+总而言之，对于任何需要精确答案的计算任务，请不要使用 float 或者 double 。
+如果你想让系统来处理十进制小数点，并且不介意因为不使用基本类型而带来的不便，就请使用BigDecimal。使用BigDecimal还有一些额外的好处，它允许你完全控制舍人，每当一个操作涉及舍入的时候，你都可以从 8 种舍入模式中选择其－ 。如果你正通过合法强制的舍入行为进行商务计算，使用 BigDecimal 是非常方便的. 如果性能非常关键，并且你又不介意自己处理十进制小数点，而且所涉及的数值又不太大，就可以使用 int 或者 long 。
+如果数值范围没有超过 9 位十进制数字,就可以使用Int :如果不超过 18 位数字，就可以使用long 。如果数值可能超过 18 位数字，就必须使用BigDecimal 
+
+public static Long toScaleLong(String amount) {
+        BigDecimal b1 = new BigDecimal(amount);
+        BigDecimal b2 = new BigDecimal(100);
+        return b1.multiply(b2).longValue();
+}
+
  
 
 
