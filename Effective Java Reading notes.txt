@@ -804,6 +804,19 @@ LineDash(int nativeId, int ooxmlId, int... pattern) {
 	this.pattern = (pattern == null || pattern.length == 0) ? null : pattern;
 }
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第五十四条--返回零长度的数组或者集合，而不是 null
+这一点在现在的编码过程中经常遇到，下面给出一个例子来说明这一点
+ private List<String> fetchRoomIds(String deptId) {
+	List<MeetingRoomVO> roomVOS = meetingRoomService.queryByDeptId(deptId, null);
+	if (roomVOS.isEmpty()) {
+		return Collections.emptyList();
+	}
+	return roomVOS.stream().map(MeetingRoomVO::getId).collect(Collectors.toList());
+}
+按照自己的习惯，一般会选择返回null，但是当和前端联调接口时，他们的习惯是如果返回空集合则说明不包含任何元素，而且可以省略判空这一步。
+
  
 
 
