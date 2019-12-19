@@ -722,6 +722,28 @@ leaderList.parallelStream().forEach(leader -> {
             leaderMeetingRepository.save(leaderMeetingDO);
 });
 类似于这些功能实现,parallelStream确实能够发挥其最大性能，否则，谨慎使用parallelStream。
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+【方法】
+
+如何处理参数和返回值，如何设计方法签名，如何为方法编写文档。注重可用性、灵活性、健壮性
+第四十九条--检查参数的有效性
+这里学到了一个Java7 添加进来的不需要人工去判断是否为null的方法：Objects.requireNonNull,下面的例子是把流中的数据写出到输出流，保证每一个字符都不为null（导出excle表格工具类用到的方法）
+// 循环取出流中的数据
+byte[] b = new byte[100];
+int len;
+try {
+	while ((len = Objects.requireNonNull(inStream).read(b)) > 0) {
+		response.getOutputStream().write(b, 0, len);
+	}
+} catch (IOException e) {
+	log.error("error is : {} ", e);
+}
+总结:
+简而言之，每当编写方法或者构造器的时候，应该考虑它的参数有哪些限制 。应该把这些限制写到文档中，并且在这个方法体的开头处，通过显式的检查来实施这些限制。养成
+这样的习惯是非常重要的 。只要有效性检查有一次失败，你为必要的有效性检查所付出的努力便都可以连本带利地得到偿还了 。
+
  
 
 
