@@ -643,6 +643,33 @@ public @interface Override {
 }
 总结：如果想要定义类型，一定要使用接口
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+【lambda和Stream】
+
+在 Java 8 中，增加了函数接口（ functional interface ）、Lambda和方法引用（ method reference ），使得创建函数对象（fuction object）变得很容易 。与此同时，还增加了Stream
+API，为处理数据元素的序列提供了类库级别的支持 。在本章中，将讨论如何最佳地利用这些机制。
+
+第四十二条--lambda优先于匿名类
+
+匿名类的常规用法：匿名类满足了传统的面向对象的设计模式对函数对象的需求,策略模式就是这样，接口方法可以随意切换策略（更换实现方法）详细见我的博客：https://www.cnblogs.com/ysw-go/p/5379971.html
+Collection.sort(words,new Comparator<String>(){
+	public int compare(String s1,String s2){
+		return Integer.compare(s1.length(),s2.length());
+	}
+  }
+)
+函数接口：带有单个抽象方法的接口
+Collections.sort(words,(s1,s2)->Integer.compare(s1.length(),s2.length()));
+还可以更简洁：
+String[] m={"zzy","znm","it"};
+Arrays.sort(m, (o1, o2) -> o1.length()-o2.length());
+在Jdk1.8之后，新增了comparingXXX等方法，可以更加简洁：
+String[] m={"zzy","znm","it"};
+Arrays.sort(m, comparingInt(String::length));
+总结一下：Lambda是表示小函数对象的最佳方式，千万不要给函数对象使用匿名类，除非必须创建非函数接口的类型的实例。打开了从未实践过的在Java中进行函数编程的大门。
+
+
 
 
 
