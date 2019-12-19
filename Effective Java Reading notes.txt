@@ -675,6 +675,23 @@ Arrays.sort(m, comparingInt(String::length));
 方法引用，像上一条的Arrays.sort(m, comparingInt(String::length));这样就是运用的方法引用
 方法引用常常比lambda表达式更加的简洁明了，只要方法引用更加简洁，清晰，就用方法引用；如果方法引用并不简洁，就坚持使用lambda
 
+第四十四条--坚持使用标准的函数接口
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+第四十五条--谨慎使用Stream
+Java 8增加的Stream API，提供了两个关键的抽象：
+1)Stream(流)代表的数据元素有限或者无线的顺序
+2)String pipline代表这些元素的一个多级计算
+Map<String, List<MeetingRoomDO>> roomMap = meetingRoomDOS.stream()
+                .filter(room -> StringUtils.isNotBlank(room.getType()))
+                .collect(Collectors.groupingBy(MeetingRoomDO::getType, Collectors.toList()));
+Stream pipeline 通常是 lazy 的 ：直到调用终止操作时才会开始计算 ，对于完成终止操作不需要的数据元素，将永远都不会被计算 
+默认情况下， Stream pipeline 是按顺序运行的 。 要使 pipelin巳并发执行，只需在该pipeline 的任何 Stream 上调用 parallel 方法即可，但是通常不建议这么做。
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
