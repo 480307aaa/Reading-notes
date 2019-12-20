@@ -864,6 +864,81 @@ public static Long toScaleLong(String amount) {
         return b1.multiply(b2).longValue();
 }
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+第六十一条--基本类型优先于装箱基本类型
+Java类型系统：基本数据类型+引用类型，每个基本类型都有对应的引用类型
+需要注意的几个点：
+1.基本类型通常比装箱类型更节省时间和空间
+2.对装箱基本类型运用'=='操作符几乎都是错误的。
+3.当在一项操作中混用基本类型和装箱基本类型时，装箱基本类型就会自动拆箱。
+这一点不太明白，为啥在Springboot项目中，pojo基本类的属性字段的定义都是装箱类型，而不是基本类型？
+在这篇博文中我找到了答案：https://juejin.im/post/5d8ff563f265da5bb252de76
+结合这篇博文，给出基本类型和装箱类型之间的区别：
+1）包装类型可以为null，而基本类型不可以
+举个例子：在Springboot项目中，pojo中可以应用包装类型，不能用基本类型。和POJO类似的，还有数据传输对象DTO(Data Transfer Object,泛指用于展示层与服务层之间的数据传输对象)、视图对象（View Object,把某个页面的数据封装起来）、持久化对象PO（Persiste Object，可以看成是与数据库中的表映射的Java对象）
+那为什么POJO的属性必须要用包装类型呢？
+数据库的查询结果可能为null，如果使用基本类型的话，因为要自动拆箱，就会抛出nullPointer的异常
+2）包装类型可用于泛型，而基本类型不可以
+因为泛型在编译时会进行类型擦除，最后只保留原始类型，而原始类型只能是Object类及其子类--基本类型是个特例
+3）基本类型比包装类更高效
+基本类型是在栈中直接存储的具体数值，而包装类型则存储的是在堆中的引用。、
+4）两个包装类型的值可以相同，但却不相等
+Integer chenmo = new Integer(10);
+Integer wanger = new Integer(10);
+
+System.out.println(chenmo == wanger); // false
+System.out.println(chenmo.equals(wanger )); // true
+
+包装类型：
+1）用equals判断比较的是两个int值是否相等
+2）用‘==’判断比较的是其指向的地址是否相等
+此处介绍一下Integer的缓存机制：也就是下面这个函数搞得鬼，
+private static class IntegerCache {
+  static final int low = -128;
+  static final int high;
+  static final Integer cache[];
+
+  static {
+    // high value may be configured by property
+    int h = 127;
+    String integerCacheHighPropValue =
+      sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+    if (integerCacheHighPropValue != null) {
+      try {
+        int i = parseInt(integerCacheHighPropValue);
+        i = Math.max(i, 127);
+        // Maximum array size is Integer.MAX_VALUE
+        h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+      } catch( NumberFormatException nfe) {
+        // If the property cannot be parsed into an int, ignore it.
+      }
+    }
+    high = h;
+
+    cache = new Integer[(high - low) + 1];
+    int j = low;
+    for(int k = 0; k < cache.length; k++)
+      cache[k] = new Integer(j++);
+
+    // range [-128, 127] must be interned (JLS7 5.1.7)
+    assert IntegerCache.high >= 127;
+  }
+
+  private IntegerCache() {}
+}
+
+从以上代码中可以看到默认会把 -128 到 127的值缓存起来，因此会有下面的结果
+public static void main(String[] args) {
+  Integer l1 = 120;
+  Integer l2 = 120;
+  Integer l3 = 128;
+  Integer l4 = 128;
+  System.out.println(l1 == l2); //true
+  System.out.println(l3 == l4); //false
+}
+
+
  
 
 
